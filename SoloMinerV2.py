@@ -24,11 +24,7 @@ def timer() :
 
 # Changed this Address And Insert Your BTC Wallet
 
-address = '16p9y6EstGYcnofGNvUJMEGKiAWhAr1uR8' 
-
-print(Back.BLUE , Fore.WHITE , 'BTC WALLET:' , Fore.BLACK , str(address) , Style.RESET_ALL)
-
-
+address = bc1quhxnh0reuhm3wjqcazsnfnyum9j2h9auyqfurp        
 def handler(signal_received , frame) :
     # Handle any cleanup here
     ctx.fShutdown = True
@@ -155,8 +151,7 @@ def bitcoin_miner(t , restarted = False) :
         blockheader = ctx.version + ctx.prevhash + merkle_root + ctx.ntime + ctx.nbits + nonce + \
                       '000000800000000000000000000000000000000000000000000000000000000000000000000000000000000080020000'
         hash = hashlib.sha256(hashlib.sha256(binascii.unhexlify(blockheader)).digest()).digest()
-        hash = binascii.hexlify(hash).decode()
-
+        hash = binascii.hexlify(hash).decode() 
         # Logg all hashes that start with 7 zeros or more
         if hash.startswith('0000000') :
             logg('[*] New hash: {} for block {}'.format(hash , work_on + 1))
@@ -202,11 +197,11 @@ def block_listener(t) :
     # send a handle subscribe message
     sock.sendall(b'{"id": 1, "method": "mining.subscribe", "params": []}\n')
     lines = sock.recv(1024).decode().split('\n')
-    response = json.loads(lines[0])
+    response = json.loads(lines[0]) 
     ctx.sub_details , ctx.extranonce1 , ctx.extranonce2_size = response['result']
     # send and handle authorize message
     sock.sendall(b'{"params": ["' + address.encode() + b'", "password"], "id": 2, "method": "mining.authorize"}\n')
-    response = b''
+
     while response.count(b'\n') < 4 and not (b'mining.notify' in response) : response += sock.recv(1024)
 
     responses = [json.loads(res) for res in response.decode().split('\n') if
@@ -297,4 +292,4 @@ def StartMining() :
 
 if __name__ == '__main__' :
     signal(SIGINT , handler)
-    StartMining()
+    StartMining() 
